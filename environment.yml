@@ -3,10 +3,10 @@ dependencies:
   - numpy
   - pandas
   - matplotlib
-  - PyQt5
   - tqdm
   - pip
   - pip:
     - pyAnalytics
     - pyDataFitting
     - pyPreprocessing
+    - PyQt5
