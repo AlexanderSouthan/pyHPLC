@@ -12,4 +12,6 @@ from src.pyHPLC.hplc_data import hplc_data
 
 class TestNonlinearRegression(unittest.TestCase):
 
-    pass
+    def test_import(self):
+
+        pass

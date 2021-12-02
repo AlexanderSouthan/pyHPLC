@@ -8,7 +8,7 @@ Best used in combination with hplc_calibration and hplc_prediction.
 import numpy as np
 import pandas as pd
 
-from pyAnalytics.measurement_parameters import measurement_parameters
+from .measurement_parameters import measurement_parameters
 from pyPreprocessing.baseline_correction import generate_baseline
 
 
