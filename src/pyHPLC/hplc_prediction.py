@@ -10,7 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from pyDataFitting.nonlinear_regression import calc_function
-from pyAnalytics import hplc_data, hplc_calibration
+from .hplc_data import hplc_data
+from .hplc_calibration import hplc_calibration
 
 
 class hplc_prediction():

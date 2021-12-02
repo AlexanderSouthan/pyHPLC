@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (QMainWindow, QComboBox, QWidget, QGridLayout,
                              QHBoxLayout, QVBoxLayout, QFileDialog, QLineEdit)
 
 from gui_objects.plot_canvas import plot_canvas
-from pyAnalytics.hplc_calibration import hplc_calibration
+from pyHPLC.hplc_calibration import hplc_calibration
 # from gui_objects.image_canvas import image_canvas
 # from pyAnalytics.hplc_data import hplc_data
 

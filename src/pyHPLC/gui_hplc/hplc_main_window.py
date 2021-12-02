@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QWidget,
 from hplc_import_window import hplc_import_window
 from hplc_calibration_window import hplc_calibration_window
 from hplc_visualization_window import hplc_visualization_window
-from pyAnalytics.hplc_prediction import hplc_prediction
+from pyHPLC.hplc_prediction import hplc_prediction
 
 
 class main_window(QMainWindow):

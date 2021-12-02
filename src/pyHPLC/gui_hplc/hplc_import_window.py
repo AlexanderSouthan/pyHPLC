@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QWidget,
 
 # import own modules ################
 #from gui_objects.plot_canvas import plot_canvas
-from pyAnalytics.hplc_data import hplc_data
+from pyHPLC.hplc_data import hplc_data
 from hplc_calibration_window import hplc_calibration_window
 from hplc_visualization_window import hplc_visualization_window
 #####################################
