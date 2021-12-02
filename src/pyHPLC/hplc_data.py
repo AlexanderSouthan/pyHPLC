@@ -58,7 +58,7 @@ class hplc_data():
         """
         if mode == 'import':
             self.import_path = kwargs.get('full_path', None)
-            
+
             if self.import_path is None:
                 self.file_name = kwargs.get('file_name')
                 directory = kwargs.get('directory', None)

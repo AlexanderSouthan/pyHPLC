@@ -1,7 +1,7 @@
 numpy
 pandas
 matplotlib
-PyQt5
 pyDataFitting
 pyPreprocessing
 tqdm
+PyQt5

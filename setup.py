@@ -4,5 +4,5 @@ setup(
     name='pyHPLC',
     version='0.0.1',
     packages=find_packages(where='src'),
-    install_requires=['numpy', 'pandas', 'matplotlib', 'PyQt5', 'pyAnalytics', 'pyDataFitting', 'pyPreprocessing', 'tqdm'],
+    install_requires=['numpy', 'pandas', 'matplotlib', 'pyAnalytics', 'PyQt5', 'pyDataFitting', 'pyPreprocessing', 'tqdm'],
 )
