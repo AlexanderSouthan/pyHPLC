@@ -6,7 +6,6 @@ dependencies:
   - tqdm
   - pip
   - pip:
-    - pyAnalytics
     - pyDataFitting
     - pyPreprocessing
     - PyQt5

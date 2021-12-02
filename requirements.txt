@@ -2,7 +2,6 @@ numpy
 pandas
 matplotlib
 PyQt5
-pyAnalytics
 pyDataFitting
 pyPreprocessing
 tqdm
