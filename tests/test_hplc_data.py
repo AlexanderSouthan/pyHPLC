@@ -10,7 +10,7 @@ import unittest
 from src.pyHPLC.hplc_data import hplc_data
 
 
-class TestNonlinearRegression(unittest.TestCase):
+class TestHPLCData(unittest.TestCase):
 
     def test_hplc_data(self):
 
