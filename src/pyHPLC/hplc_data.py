@@ -133,7 +133,7 @@ class hplc_data():
         self.raw_data.columns = self.wavelengths
 
     def crop_data(self, time_limits=None, wavelength_limits=None,
-                  active_data=None):
+                  active_data=None, to_processed=True):
         """
         Use to extract one part from the complete 3D HPLC datset self.raw_data.
 
@@ -156,6 +156,9 @@ class hplc_data():
             preprocessing must be done prior to calling this method, this
             preprocessed data in a similar format as self.raw_data can be
             passed as this argument. The default is None.
+        to_processed : boolean, optional
+            Defines if the cropped data is saved in self.data_processed.
+            Default is True.
 
         Returns
         -------
@@ -193,7 +196,8 @@ class hplc_data():
                 active_data.columns, wavelength_limits[1]) + 1
             ]
 
-        self.processed_data = cropped_data
+        if to_processed:
+            self.processed_data = cropped_data
 
         return cropped_data
 
@@ -227,8 +231,8 @@ class hplc_data():
 
         elugram = self.crop_data(
             time_limits=time_limits,
-            wavelength_limits=[wavelength, wavelength], active_data=active_data
-            )
+            wavelength_limits=[wavelength, wavelength],
+            active_data=active_data, to_processed=False)
 
         # if baseline_correction:
         #     # baseline is not saved in any form and so far no method for full
@@ -247,8 +251,8 @@ class hplc_data():
 
         spectrum = self.crop_data(
             time_limits=[elution_time, elution_time],
-            wavelength_limits=wavelength_limits, active_data=active_data
-            ).T
+            wavelength_limits=wavelength_limits, active_data=active_data,
+            to_processed=False).T
 
         return spectrum
 
@@ -294,7 +298,8 @@ class hplc_data():
 
         active_data = self.crop_data(time_limits=time_limits,
                                      wavelength_limits=wavelength_limits,
-                                     active_data=active_data)
+                                     active_data=active_data,
+                                     to_processed=False)
 
         assert dim in ['time', 'wavelength'], 'Allowed values for dim are time and wavelength, current value is {}.'.format(dim)
         projection_axis = 1 if dim=='time' else 0
@@ -349,7 +354,8 @@ class hplc_data():
         active_data = self.check_active_data(active_data)
         active_data = self.crop_data(time_limits=time_limits,
                                      wavelength_limits=wavelength_limits,
-                                     active_data=active_data)
+                                     active_data=active_data,
+                                     to_processed=False)
 
         if mode == 'elugrams':
             integration_axis = 0

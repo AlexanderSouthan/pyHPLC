@@ -61,7 +61,7 @@ class hplc_calibration():
             If this is True, the calibration_data will be normalized
             accordingly. The default is False.
         **kwargs : 
-            pcr_components : int
+            pcr_components : int, optional
                 Determines the number of principal components used for
                 principal component regression calibration. The default is 2.
             is_time_limits: list
@@ -180,8 +180,8 @@ class hplc_calibration():
         self.pcr_calibration = principal_component_regression(
             self.calibration_integrated.values.T, self.concentrations)
         self.pcr_components = n_components
-        self.pcr_calibration.pcr_fit(self.pcr_components,
-                                     cv_percentage=cv_percentage)
+        self.pcr_calibration.pcr_fit(
+            cv_percentage=cv_percentage, n_components=self.pcr_components)
 
     def pls_regression(self, n_components=2, cv_percentage=20, scale=False):
         self.plsr_calibration = pls_regression(
@@ -264,5 +264,5 @@ class hplc_calibration():
         if self.internal_standard:
             for ii, curr_data in enumerate(self.calibration_data_raw):
                 report_data.loc[ii,'internal standard area'] = curr_data.standard_data.values
-        
+
         return report_data
