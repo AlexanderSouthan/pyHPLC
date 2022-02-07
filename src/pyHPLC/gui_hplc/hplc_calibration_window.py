@@ -142,13 +142,18 @@ class hplc_calibration_window(QMainWindow):
             'concentrations': calibration_concentrations}
 
     def update_calibration(self):
-        assert len(self.calibration_parameters['concentrations']) == len(self.parent.hplc_datasets[self.active_dataset]), 'Number of concentrations is not equal to number of calibration samples.'
+        if  (len(self.calibration_parameters['concentrations']) !=
+             len(self.parent.hplc_datasets[self.active_dataset])):
+            raise ValueError('Number of concentrations ({}) is not equal to '
+                             'number of calibration samples ({}).'.format(
+                                 len(self.calibration_parameters['concentrations']),
+                                 len(self.parent.hplc_datasets[self.active_dataset])))
         self.calibration = hplc_calibration(
             'hplc_data', self.parent.hplc_datasets[self.active_dataset],
             self.calibration_parameters['concentrations'],
             time_limits=self.calibration_parameters['time_limits'],
             wavelength_limits=self.calibration_parameters['wl_limits'])
-        
+
         self.calibration_plot.axes.clear()
         self.calibration_plot.plot(
             self.calibration_parameters['concentrations'],

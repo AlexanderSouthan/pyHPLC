@@ -184,7 +184,8 @@ class main_window(QMainWindow):
         predicted_concentrations = hplc_prediction(
             curr_dataset, [curr_calibrations])
 
-        print('Simple:', predicted_concentrations.simple_prediction())
+        print('Simple CLS:', predicted_concentrations.simple_prediction(mode='cls'))
+        print('Simple PCR:', predicted_concentrations.simple_prediction(mode='pcr'))
         print('Advanced:', predicted_concentrations.advanced_prediction())
 
     def update_windows(self):

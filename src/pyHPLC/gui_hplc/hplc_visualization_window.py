@@ -146,11 +146,15 @@ class hplc_visualization_window(QMainWindow):
             if self.mode == 'elugram':
                 curr_values = self.parent.hplc_datasets[
                     self.active_dataset][ii].extract_elugram(
-                        current_value, time_limits=x_limits)
+                        current_value, time_limits=x_limits,
+                        active_data=self.parent.hplc_datasets[
+                            self.active_dataset][ii].raw_data)
             elif self.mode == 'spectrum':
                 curr_values = self.parent.hplc_datasets[
                     self.active_dataset][ii].extract_spectrum(
-                        current_value, wavelength_limits=x_limits)
+                        current_value, wavelength_limits=x_limits,
+                        active_data=self.parent.hplc_datasets[
+                            self.active_dataset][ii].raw_data)
             curr_y = pd.concat([curr_y, curr_values], axis=1)
             curr_x = curr_y.index.to_numpy()
 
@@ -168,8 +172,8 @@ class hplc_visualization_window(QMainWindow):
                     axis=1)
                 colors.extend(['r', 'b', 'g'])
 
-            y_min = min(np.min(curr_y.values), y_min)
-            y_max = max(np.max(curr_y.values), y_max)
+            y_min = min(np.min(curr_y.values[~np.isnan(curr_y.values)]), y_min)
+            y_max = max(np.max(curr_y.values[~np.isnan(curr_y.values)]), y_max)
 
             for curr_line, curr_color in zip(curr_y.columns, colors):
                 self.elugram_plot.plot(curr_x, curr_y[curr_line],
