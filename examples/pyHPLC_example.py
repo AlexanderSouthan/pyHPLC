@@ -124,7 +124,8 @@ for curr_c in calib_c:
 calibrations = []
 time_limits = [[3, 6], [3, 6], [6.1, 9], [6.1, 9]]
 wl_limits = [[225, 300], [225, 300], [250, 350], [250, 350]]
-for curr_cal_data, curr_time, curr_wl in zip(calibration_data, time_limits, wl_limits):
+for curr_cal_data, curr_time, curr_wl in zip(
+        calibration_data, time_limits, wl_limits):
     calibrations.append(hplc_calibration('hplc_data', curr_cal_data,
                                          calib_c, time_limits=curr_time,
                                          wavelength_limits=curr_wl,
@@ -138,7 +139,8 @@ calibration_1_uni = hplc_calibration('hplc_data', calibration_data[0],
 # times, but different sprectra (see below).
 fig1, ax1 = plt.subplots()
 for idx, curr_cal in enumerate(calibrations):
-    ax1.plot(curr_cal.calibration_data[4].extract_elugram(200), label='Component {}'.format(idx+1))
+    ax1.plot(curr_cal.calibration_data[4].extract_elugram(200),
+             label='Component {}'.format(idx+1))
 ax1.legend()
 ax1.set_xlabel('Retention time [min]')
 ax1.set_ylabel('Absorption [a.u.]')
@@ -147,12 +149,24 @@ ax1.set_title('Elugrams of the four pure components.')
 # Plot spectra of pure components.
 fig2, ax2 = plt.subplots()
 for idx, curr_cal in enumerate(calibrations):
-    ax2.plot(curr_cal.calibration_data[4].extract_spectrum(retention_times[idx]), label='Component {}'.format(idx+1))
+    ax2.plot(
+        curr_cal.calibration_data[4].extract_spectrum(retention_times[idx]),
+        label='Component {}'.format(idx+1))
 ax2.legend()
 ax2.set_xlabel('Wavelength [nm]')
 ax2.set_ylabel('Absorption [a.u.]')
-ax2.set_title('Absorption spectra of the four pure components at the peak max.')
+ax2.set_title(
+    'Absorption spectra of the four pure components at the peak max.')
 
+# plot calibation slopes
+fig3, ax3 = plt.subplots()
+for idx, curr_cal in enumerate(calibrations):
+    ax3.plot(curr_cal.K, label='Component {}'.format(idx+1))
+ax3.legend()
+ax3.set_xlabel('Wavelength [nm]')
+ax3.set_ylabel('Calibration slope')
+ax3.set_title(
+    'Multivariate calibration slopes of the four pure components.')
 
 
 ############ Step 2 ###################
@@ -171,13 +185,13 @@ for curr_mix_c in mix_conc:
         amps, widths))
 
 # Plot the elugrams of the mixtures
-fig3, ax3 = plt.subplots()
+fig4, ax4 = plt.subplots()
 for ii, curr_mix in enumerate(unknown_samples):
-    ax3.plot(curr_mix.extract_elugram(210), label='Mixture {}'.format(ii+1))
-ax3.legend()
-ax3.set_xlabel('Retention time [min]')
-ax3.set_ylabel('Absorption [a.u.]')
-ax3.set_title('Elugrams of the five mixtures.')
+    ax4.plot(curr_mix.extract_elugram(210), label='Mixture {}'.format(ii+1))
+ax4.legend()
+ax4.set_xlabel('Retention time [min]')
+ax4.set_ylabel('Absorption [a.u.]')
+ax4.set_title('Elugrams of the five mixtures.')
 
 
 
@@ -190,13 +204,16 @@ predicted_concentrations = hplc_prediction(
     unknown_samples, [calibrations[0:2], calibrations[2:4]])
 unknown_concentrations_cls = pd.DataFrame(
     predicted_concentrations.simple_prediction(mode='cls'),
-    index=['mix_1_pred', 'mix_2_pred', 'mix_3_pred', 'mix_4_pred', 'mix_5_pred']).T
+    index=['mix_1_pred', 'mix_2_pred', 'mix_3_pred', 'mix_4_pred',
+           'mix_5_pred']).T
 unknown_concentrations_pcr = pd.DataFrame(
     predicted_concentrations.simple_prediction(mode='pcr'),
-    index=['mix_1_pred', 'mix_2_pred', 'mix_3_pred', 'mix_4_pred', 'mix_5_pred']).T
+    index=['mix_1_pred', 'mix_2_pred', 'mix_3_pred', 'mix_4_pred',
+           'mix_5_pred']).T
 unknown_concentrations_advanced = pd.DataFrame(
     predicted_concentrations.advanced_prediction(),
-    index=['mix_1_pred', 'mix_2_pred', 'mix_3_pred', 'mix_4_pred', 'mix_5_pred']).T
+    index=['mix_1_pred', 'mix_2_pred', 'mix_3_pred', 'mix_4_pred',
+           'mix_5_pred']).T
 
 
 print('Correct_concentrations:\n', real_concentrations)
@@ -208,15 +225,8 @@ print('Predicted concentrations (multivariate, advanced):\n',
       unknown_concentrations_advanced)
 
 
-# # plot some data
-# fig1, ax1 = plt.subplots()
-# ax1.plot(calibration_1.calibration_data[4].extract_spectrum(4.3))
-# ax1.plot(calibration_2.calibration_data[4].extract_spectrum(5))
 
 # fig2, ax2 = plt.subplots()
 # ax2.plot(unknown_sample_1.raw_data.index,
 #          unknown_sample_1.raw_data.loc[:, 200])
 
-# fig3, ax3 = plt.subplots()
-# ax3.plot(calibration_1.K)
-# ax3.plot(calibration_2.K)
