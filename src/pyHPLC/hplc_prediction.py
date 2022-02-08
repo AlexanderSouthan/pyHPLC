@@ -93,13 +93,25 @@ class hplc_prediction():
                         np.linalg.inv(np.dot(calibration.K.T, calibration.K)),
                         np.dot(calibration.K.T, curr_data[np.newaxis].T))
                 elif mode == 'pcr':  # principal component regression
-                    prediction = calibration.pcr_calibration.predict(
-                        curr_data.T.reshape(1, -1),
-                        calibration.pcr_components).values
+                    if calibration.pcr_calibration is None:
+                        raise ValueError(
+                            'No PCR model present in calibration. Probably '
+                            'a single wavelength was used for calibration, '
+                            'thus not allowing PCA/PCR.')
+                    else:
+                        prediction = calibration.pcr_calibration.predict(
+                            curr_data.T.reshape(1, -1),
+                            calibration.pcr_components).values
                 elif mode == 'plsr':  # partial least squares regression
-                    prediction = calibration.plsr_calibration.predict(
-                        curr_data.T.reshape(1, -1),
-                        calibration.plsr_components)
+                    if calibration.plsr_calibration is None:
+                        raise ValueError(
+                            'No PLSR model present in calibration. Probably '
+                            'a single wavelength was used for calibration, '
+                            'thus not allowing PLSR.')
+                    else:
+                        prediction = calibration.plsr_calibration.predict(
+                            curr_data.T.reshape(1, -1),
+                            calibration.plsr_components)
                 else:
                     raise ValueError('No valid prediction mode given.')
                 predictions[sample_index, cal_index] = prediction.item()
@@ -142,12 +154,23 @@ class hplc_prediction():
 
         index_counter = 0
         for curr_set_index, curr_cals in enumerate(self.calibrations):
+            Ks = np.array(
+                [np.squeeze(calibration.K) for calibration in curr_cals]).T
+
             # calibrations in one set must have equal time and wavelength range
-            Ks = []
-            for calibration in curr_cals:
-                Ks.append(np.squeeze(calibration.K))
-            Ks = np.array(Ks).T
-            if len(Ks.shape) == 1:
+            time_limits = [calibration.time_limits
+                           for calibration in curr_cals]
+            wavelength_limits = [calibration.wavelength_limits
+                                 for calibration in curr_cals]
+            if (not np.all(np.isclose(time_limits, time_limits[0]))) or (
+                    not np.all(np.isclose(wavelength_limits,
+                                          wavelength_limits[0]))):
+                raise ValueError(
+                    'All time and wavelength ranges for calibrations used '
+                    'together must be equal, but are not. Given time ranges '
+                    'are {} and given wavelength ranges are {}.'.format(
+                        time_limits, wavelength_limits))
+            if Ks.ndim == 1:
                 raise ValueError(
                     'Singular wavelength used for multivariate calibration.')
             time_limits = curr_cals[0].time_limits

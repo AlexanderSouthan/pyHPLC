@@ -114,16 +114,13 @@ class hplc_calibration():
         self.integrate_calibration_data()
         self.classical_least_squares()
 
-        # Principal component regression can only be performed if more than one
-        # wavelength is used for calibration.
-        if len(np.squeeze(self.calibration_integrated).shape) > 1:
-            pcr_components = kwargs.get('pcr_components', 2)
-            plsr_components = kwargs.get('plsr_components', 2)
-            self.principal_component_regression(
-                n_components=pcr_components,
-                cv_percentage=1/len(self.calibration_data)*100)
-            self.pls_regression(n_components=plsr_components,
-                                cv_percentage=1/len(self.calibration_data)*100)
+        pcr_components = kwargs.get('pcr_components', 2)
+        plsr_components = kwargs.get('plsr_components', 2)
+        self.principal_component_regression(
+            n_components=pcr_components,
+            cv_percentage=1/len(self.calibration_data)*100)
+        self.pls_regression(n_components=plsr_components,
+                            cv_percentage=1/len(self.calibration_data)*100)
 
     def classical_least_squares(self):
         """
@@ -177,19 +174,31 @@ class hplc_calibration():
         None.
 
         """
-        self.pcr_calibration = principal_component_regression(
-            self.calibration_integrated.values.T, self.concentrations)
-        self.pcr_components = n_components
-        self.pcr_calibration.pcr_fit(
-            cv_percentage=cv_percentage, n_components=self.pcr_components)
+        # Principal component regression can only be performed if more than one
+        # wavelength is used for calibration.
+        if np.squeeze(self.calibration_integrated).ndim > 1:
+            self.pcr_calibration = principal_component_regression(
+                self.calibration_integrated.values.T, self.concentrations)
+            self.pcr_components = n_components
+            self.pcr_calibration.pcr_fit(
+                cv_percentage=cv_percentage, n_components=self.pcr_components)
+        else:
+            self.pcr_calibration = None
+            self.pcr_components = None
 
     def pls_regression(self, n_components=2, cv_percentage=20, scale=False):
-        self.plsr_calibration = pls_regression(
-            self.calibration_integrated.values.T, self.concentrations)
-        self.plsr_components = n_components
-        self.plsr_calibration.plsr_fit(self.plsr_components,
-                                       cv_percentage=cv_percentage,
-                                       scale=scale)
+        # PLS regression can only be performed if more than one
+        # wavelength is used for calibration.
+        if np.squeeze(self.calibration_integrated).ndim > 1:
+            self.plsr_calibration = pls_regression(
+                self.calibration_integrated.values.T, self.concentrations)
+            self.plsr_components = n_components
+            self.plsr_calibration.plsr_fit(self.plsr_components,
+                                           cv_percentage=cv_percentage,
+                                           scale=scale)
+        else:
+            self.plsr_calibration = None
+            self.plsr_components = None
 
     def integrate_calibration_data(self):
         """
