@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from .hplc_data import hplc_data
-from pyDataFitting.multivariate_regression import (
+from pyDataFitting import (
     principal_component_regression, pls_regression)
 
 
